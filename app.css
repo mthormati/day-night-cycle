@@ -1,0 +1,22 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#_fadeO_ {
+	background: linear-gradient(to bottom, #020111 85%,#191621 100%);
+  position:absolute;
+	top:0;
+  left:0;
+	z-index: 1;
+  width:100vw;
+	height:100vh;
+}
+
+#_fadeI_ {
+	background: rgb(255,0,0);
+  position:relative;
+	z-index: 0;
+  width:100vw;
+	height:100vh;
+}
