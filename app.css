@@ -3,11 +3,17 @@ body {
   padding: 0;
 }
 
+#particles-js {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+  overflow: hidden;
+}
+
 #fade-out {
 	background: #00000c;
   position:absolute;
-	top:0;
-  left:0;
 	z-index: 1;
   width:100vw;
 	height:100vh;

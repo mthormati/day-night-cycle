@@ -1,69 +1,3 @@
-// particlesJS.load('particles-js', 'javascript/particlesjs-config.json', function() {
-//   console.log('callback - particles.js config loaded');
-// });
-/*
-$(function() {
-	var index = 1;
-
-  var even = true;
-
-	var fadeO = function () {
-		console.log(index);
-    var $fo = $('#_fadeO_');
-    var $fi = $('#_fadeI_');
-
-		var oldBG = $fo.css('background');
-		var newBG = $fi.css('background');
-
-		$fo.fadeOut(12000, function() {
-				$fo.css('background', backgrounds[index]);
-        $fo.css('display', 'block');
-				$fo.css('opacity', '1');
-				// equivalent of loading new image
-				if (index + 1 == 24) {
-					$fi.css('background', backgrounds[0]);
-				} else {
-					$fi.css('background', backgrounds[index + 1]);
-				}
-
-				index++;
-				if (index >= 24) {
-					index = 0;
-				}
-		});
-		if (index > 5 && index < 22) {
-			$('#particles-js').fadeOut(8000);
-		} else {
-			$('#particles-js').fadeIn(8000);
-		}
-	};
-
-
-	function setBackground() {
-		var time = new Date();
-		var hour = time.getHours();
-		hour = 22;
-    index = hour + 1;
-		if (hour > 6 && hour < 22) {
-			$('#particles-js').hide();
-		}
-		$('#_fadeO_').css('background', backgrounds[hour]);
-    if (hour == 23) {
-      $('#_fadeI_').css('background', backgrounds[0]);
-    } else {
-      $('#_fadeI_').css('background', backgrounds[hour + 1]);
-    }
-
-	}
-
-	$(window).load(function () {
-    setBackground();
-		fadeO();
-		setInterval(fadeO, 12050);
-	});
-});
-*/
-
 const app = {
 	init(backgroundArray, selectors, transitionInfo) {
 		this.backgrounds = backgroundArray;
@@ -74,22 +8,30 @@ const app = {
 		this.pause = transitionInfo.pause;
 
 		// Sets initial linear gradient based on current time
-		this.setBackground();
+		this.setHourBackground();
+		// Sets initial linear gradient to the first gradient in backgrounds
+		//this.setGeneralBackground();
+
+		this.setParticleVisibility();
+		this.transitionGradients();
 		setInterval(this.transitionGradients.bind(this), this.fadeLength + this.pause);
 	},
 
-	setBackground() {
+	setHourBackground() {
 		const hour = (new Date()).getHours();
 		this.index = hour + 1;
-		// if (hour > 6 && hour < 22) {
-		// 	$('#particles-js').hide();
-		// }
-		this.fadeOutDiv.css('background', backgrounds[hour]);
+
+		this.fadeOutDiv.css('background', this.backgrounds[hour]);
 		if (hour === this.backgrounds.length - 1) {
 			this.fadeInDiv.css('background', this.backgrounds[0]);
 		} else {
 			this.fadeInDiv.css('background', this.backgrounds[hour + 1]);
 		}
+	},
+
+	setGeneralBackground() {
+		this.fadeOutDiv.css('background', this.backgrounds[0]);
+		this.fadeInDiv.css('background', this.backgrounds[1]);
 	},
 
 	transitionGradients() {
@@ -114,11 +56,21 @@ const app = {
 				this.index = 0;
 			}
 		});
-		// if (index > 5 && index < 22) {
-		// 	$('#particles-js').fadeOut(8000);
-		// } else {
-		// 	$('#particles-js').fadeIn(8000);
-		// }
+		this.fadeParticles();
+	},
+
+	setParticleVisibility() {
+		if (this.index - 1 > 6 && this.index - 1 < 22) {
+			$('#particles-js').hide();
+		}
+	},
+
+	fadeParticles() {
+		if (this.index > 5 && this.index < 22) {
+			$('#particles-js').fadeOut(this.fadeLength / 2);
+		} else {
+			$('#particles-js').fadeIn(this.fadeLength / 2);
+		}
 	},
 }
 
@@ -151,8 +103,12 @@ const selectors = {
 	fadeInSelector: '#fade-in',
 }
 const transitionInfo = {
-	fadeLength: 1000,
+	fadeLength: 5000,
 	pause: 50,
 }
 
 app.init(backgrounds, selectors, transitionInfo);
+
+particlesJS.load('particles-js', 'javascript/particlesjs-config.json', function() {
+  console.log('callback - particles.js config loaded');
+});
